@@ -1,9 +1,29 @@
 import { Router } from "express";
+import dotenv from "dotenv";
 import multer from "multer";
+import { Client as MinioClient } from "minio";
+import { MinioStorageEngine } from "@namatery/multer-minio";
 import { addRecipe, deleteRecipe, getRecipe, getRecipes, updateRecipe } from "../controllers/recipes.controller.js";
 
+// Load env variables
+dotenv.config({ path: ['.env.local'] });
+
+// Create minio client
+const minioClient = new MinioClient({
+    endPoint: 'minio-dev.azurewebsites.net',
+    useSSL: true,
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+});
+
 // Create multer upload middleware
-const upload = multer({ dest: 'uploads/images' });
+// const upload = multer({ dest: 'uploads/images' });
+const upload = multer({
+    storage: new MinioStorageEngine(minioClient, 'recipe-api', {
+        path: 'images'
+    }),
+    preservePath: true
+});
 
 // Create recipes router
 const router = Router();
