@@ -5,7 +5,8 @@ export const addRecipe = async (req, res, next) => {
         // Add recipe to database
         const createResult = await RecipeModel.create({
             ...req.body,
-            image: req.file.filename
+            image: req.file.filename,
+            userId: req.session.user.id
         });
         // Return response
         res.status(201).json(createResult);
@@ -17,7 +18,7 @@ export const addRecipe = async (req, res, next) => {
 export const getRecipes = async (req, res, next) => {
     try {
         // Get all recipes from database
-        const findResult = await RecipeModel.find();
+        const findResult = await RecipeModel.find(req.query);
         // Return response
         res.status(200).json(findResult);
     } catch (error) {
@@ -44,9 +45,9 @@ export const getRecipe = async (req, res, next) => {
 }
 
 export const updateRecipe = (req, res) => {
-    res.send(`Update recipe with id: ${req.params.id}`);
+    res.json(`Update recipe with id: ${req.params.id}`);
 }
 
 export const deleteRecipe = (req, res) => {
-    res.send(`Delete recipe with id: ${req.params.id}`);
+    res.json(`Delete recipe with id: ${req.params.id}`);
 }

@@ -4,6 +4,7 @@ import multer from "multer";
 import { Client as MinioClient } from "minio";
 import { MinioStorageEngine } from "@namatery/multer-minio";
 import { addRecipe, deleteRecipe, getRecipe, getRecipes, updateRecipe } from "../controllers/recipes.controller.js";
+import { checkSessionUser } from "../middlewares/auth.middleware.js";
 
 // Load env variables
 dotenv.config({ path: ['.env.local'] });
@@ -27,6 +28,9 @@ const upload = multer({
 
 // Create recipes router
 const router = Router();
+
+// Apply middlewares
+router.use(checkSessionUser);
 
 // Define routes
 router.post('/', upload.single('image'), addRecipe);
