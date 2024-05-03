@@ -44,13 +44,12 @@ export const login = async (req, res, next) => {
 export const profile = async (req, res, next) => {
     try {
         // Find user by id
-        const findByIdResult = await UserModel.findById(req.session.user.id);
+        const findByIdResult = await UserModel.findById(req.session.user.id).select({ password: 0 });
         if (!findByIdResult) {
             return res.status(401).json("Session user not found in database!");
         }
         // Return response
-        const { fullName, email } = findByIdResult;
-        res.status(200).json({ fullName, email });
+        res.status(200).json(findByIdResult);
     } catch (error) {
         next(error);
     }

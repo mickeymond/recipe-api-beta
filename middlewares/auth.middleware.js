@@ -1,5 +1,4 @@
-
-export const checkSessionUser = (req, res, next) => {
+export const checkUserSession = (req, res, next) => {
     if (req.session.user) {
         next();
     } else {

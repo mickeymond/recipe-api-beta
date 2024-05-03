@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { login, logout, profile, register } from "../controllers/users.controller.js";
-import { checkSessionUser } from "../middlewares/auth.middleware.js";
+import { checkUserSession } from "../middlewares/auth.middleware.js";
 
 // Create users router
 const router = Router();
@@ -10,9 +10,9 @@ router.post('/register', register);
 
 router.post('/login', login);
 
-router.get('/profile', checkSessionUser, profile);
+router.get('/profile', checkUserSession, profile);
 
-router.post('/logout', checkSessionUser, logout);
+router.post('/logout', checkUserSession, logout);
 
 // Export router
 export default router;
